@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import logo from './logo.svg';
-import './App.css';
 import {WeatherForecastApi} from './out/api'
+import { Container } from 'semantic-ui-react';
+import { Nav } from './components/header/Nav';
+import { Route, Switch } from 'react-router-dom';
+import { Shop } from './components/main/shop/Shop';
+import { Login } from './components/main/auth/Login';
+import { Cart } from './components/main/cart/Cart';
 
-function App() {
+function App(): JSX.Element {
   const [a, setA] = useState('a' as any)
   useEffect(
     () => {
@@ -15,9 +19,17 @@ function App() {
       bb()
   }, [])
   return (
-    <div className="App">
-      {a}
-    </div>
+    <Container>
+      <Nav />
+      <Switch>
+        <Route path="/" exact>
+          Home
+        </Route>
+        <Route path="/shop" component={Shop} />
+        <Route path="/cart" component={Cart} />
+        <Route path="/login" component={Login} />
+      </Switch>
+    </Container>
   );
 }
 
