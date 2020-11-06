@@ -17,27 +17,26 @@ export const addToCart = (product: Product, quantity: number) => {
   return typedAction("products/ADD_TO_CART", { product, quantity });
 };
 
+export const productLoading = (loading: boolean) => {
+  return typedAction("prodcuts/LOADING", loading)
+}
+
 // Action creator returning a thunk!
+// set loading state
 export const loadProducts = () => {
   return (dispatch: Dispatch<AnyAction>, getState: () => RootState) => {
+    dispatch(productLoading(true))
     setTimeout(() => {
       // pretend to load an item
       dispatch(
         addProducts([...getState().products.products, ...sampleProducts])
-        // addProducts([
-        //   {
-        //     id: 1,
-        //     name: "cool headphones",
-        //     price: 4999,
-        //     img: "https://placeimg.com/640/480/tech/5",
-        //   },
-        // ])
       );
+      dispatch(productLoading(false))
     }, 5000);
   };
 };
 
-type ProductAction = ReturnType<typeof addProducts | typeof addToCart>;
+type ProductAction = ReturnType<typeof addProducts | typeof addToCart | typeof productLoading>;
 export function productsReducer(
   state = initialState,
   action: ProductAction
@@ -48,6 +47,11 @@ export function productsReducer(
         ...state,
         products: [...state.products, ...action.payload],
       };
+    case 'prodcuts/LOADING':
+      return {
+        ...state,
+        loading: action.payload
+      }
     case "products/ADD_TO_CART":
       return {
         ...state,

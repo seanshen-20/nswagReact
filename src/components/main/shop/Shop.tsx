@@ -5,39 +5,39 @@ import { bindActionCreators, Dispatch } from "redux";
 import { loadProducts } from "../../../redux/modules/products";
 import { connect } from "react-redux";
 import { ProductCard } from "./ProductCard";
-import { login } from "../../../redux/modules/user";
 
 const mapStateToProps = (state: RootState) => ({
-  products: state.products.products
+  products: state.products.products,
+  loading: state.products.loading,
 });
-
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return bindActionCreators(
     {
-      loadProducts
+      loadProducts,
     },
     dispatch
-  );
-}
-
+  )
+};
 
 type Props = ReturnType<typeof mapStateToProps> &
   ReturnType<typeof mapDispatchToProps>;
 
-const UnconnectedShop: React.FC<Props> = ({ loadProducts, products }) => {
+// when loading, do not take new income products and add them to array 
+// take the first call 
+const UnconnectedShop: React.FC<Props> = ({ loadProducts, products, loading }) => {
   useEffect(() => {
-    if (products.length === 0) {
+    if (products.length === 0 && !loading) {
       loadProducts();
     }
-  }, [loadProducts, products]);
+  }, [loadProducts, products, loading]);
 
   return (
     <Container>
       <Header as="h2">Shop</Header>
       <Card.Group>
-        {products.map(product => (
-          <ProductCard key= {product.id} product={product} />
+        {products.map((product) => (
+          <ProductCard key={product.id} product={product} />
         ))}
       </Card.Group>
     </Container>

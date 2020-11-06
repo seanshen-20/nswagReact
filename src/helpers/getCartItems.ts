@@ -4,7 +4,6 @@ import { createSelector } from "reselect";
 type CheckoutItem = CartItem & Product;
 
 export const getCartItems1 = (state: RootState): CheckoutItem[] => {
-  console.log('aaa')
   return state.products.cart.reduce((acc, el) => {
     const associatedProduct = state.products.products.find(
       product => product.id === el.id
@@ -18,6 +17,5 @@ export const getCartItems1 = (state: RootState): CheckoutItem[] => {
 export const getCartItems = createSelector(getCartItems1, a=>a)
 
 export const getTotalPrice = createSelector(getCartItems, cartItems => {
-  console.log('price')
   return cartItems.reduce((acc, el) => acc + el.price * el.quantity, 0);
 });
